@@ -1,0 +1,42 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/sh/AirSim/ros/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/sh/SEER_sh/devel/include/**",
+        "/home/sh/SEER_sh/src/SEER/planner/active_perception/include/**",
+        "/home/sh/AirSim/ros/src/airsim_ros_pkgs/include/**",
+        "/home/sh/SEER_sh/src/SEER/third_party/DecompROS/decomp_ros_utils/include/**",
+        "/home/sh/SEER_sh/src/SEER/planner/exploration_manager/include/**",
+        "/home/sh/SEER_sh/src/SEER/planner/kino_searching/include/**",
+        "/home/sh/SEER_sh/src/kr_mav_control/kr_mav_controllers/include/**",
+        "/home/sh/SEER_sh/src/kr_mav_control/kr_mav_manager/include/**",
+        "/home/sh/SEER_sh/src/kr_mav_control/kr_quadrotor_simulator/include/**",
+        "/home/sh/SEER_sh/src/kr_mav_control/interfaces/kr_serial_interface/include/**",
+        "/home/sh/SEER_sh/src/kr_mav_control/trackers/kr_trackers/include/**",
+        "/home/sh/SEER_sh/src/kr_mav_control/trackers/kr_trackers_manager/include/**",
+        "/home/sh/SEER_sh/src/SEER/third_party/local_sensing/include/**",
+        "/home/sh/SEER_sh/src/mrsl_quadrotor/mrsl_quadrotor_simulator/include/**",
+        "/home/sh/SEER_sh/src/mrsl_quadrotor/mrsl_quadrotor_utils/include/**",
+        "/home/sh/SEER_sh/src/SEER/map_pred_utils/occ_predictor/include/**",
+        "/home/sh/SEER_sh/src/SEER/third_party/path_searching/include/**",
+        "/home/sh/SEER_sh/src/SEER/planner/plan_env/include/**",
+        "/home/sh/SEER_sh/src/SEER/planner/plan_manage/include/**",
+        "/home/sh/SEER_sh/src/SEER/third_party/pose_utils/include/**",
+        "/home/sh/SEER_sh/src/SEER/third_party/traj_utils/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
