@@ -116,10 +116,10 @@ void AirsimROSWrapper::create_ros_pubs_from_settings_json()
     gimbal_angle_euler_cmd_sub_ = nh_private_.subscribe("gimbal_angle_euler_cmd", 50, &AirsimROSWrapper::gimbal_angle_euler_cmd_cb, this);
     origin_geo_point_pub_ = nh_private_.advertise<airsim_ros_pkgs::GPSYaw>("origin_geo_point", 10);
 
-    airsim_img_request_vehicle_name_pair_vec_.clear();
-    image_pub_vec_.clear();
-    cam_info_pub_vec_.clear();
-    camera_info_msg_vec_.clear();
+    // airsim_img_request_vehicle_name_pair_vec_.clear();
+    // image_pub_vec_.clear();
+    // cam_info_pub_vec_.clear();
+    // camera_info_msg_vec_.clear();
     vehicle_name_ptr_map_.clear();
     size_t lidar_cnt = 0;
 
@@ -146,7 +146,7 @@ void AirsimROSWrapper::create_ros_pubs_from_settings_json()
         vehicle_ros->odom_frame_id = curr_vehicle_name + "/" + odom_frame_id_;
         vehicle_ros->vehicle_name = curr_vehicle_name;
 
-        append_static_vehicle_tf(vehicle_ros.get(), *vehicle_setting);
+        // append_static_vehicle_tf(vehicle_ros.get(), *vehicle_setting);
 
         vehicle_ros->odom_local_pub = nh_private_.advertise<nav_msgs::Odometry>(curr_vehicle_name + "/" + odom_frame_id_, 10);
 
@@ -191,46 +191,46 @@ void AirsimROSWrapper::create_ros_pubs_from_settings_json()
         }
 
         // iterate over camera map std::map<std::string, CameraSetting> .cameras;
-        for (auto& curr_camera_elem : vehicle_setting->cameras) {
-            auto& camera_setting = curr_camera_elem.second;
-            auto& curr_camera_name = curr_camera_elem.first;
+        // for (auto& curr_camera_elem : vehicle_setting->cameras) {
+        //     auto& camera_setting = curr_camera_elem.second;
+        //     auto& curr_camera_name = curr_camera_elem.first;
 
-            set_nans_to_zeros_in_pose(*vehicle_setting, camera_setting);
-            append_static_camera_tf(vehicle_ros.get(), curr_camera_name, camera_setting);
-            // camera_setting.gimbal
-            std::vector<ImageRequest> current_image_request_vec;
+        //     set_nans_to_zeros_in_pose(*vehicle_setting, camera_setting);
+        //     // append_static_camera_tf(vehicle_ros.get(), curr_camera_name, camera_setting);
+        //     // camera_setting.gimbal
+        //     std::vector<ImageRequest> current_image_request_vec;
 
-            // iterate over capture_setting std::map<int, CaptureSetting> capture_settings
-            for (const auto& curr_capture_elem : camera_setting.capture_settings) {
-                const auto& capture_setting = curr_capture_elem.second;
+        //     // iterate over capture_setting std::map<int, CaptureSetting> capture_settings
+        //     for (const auto& curr_capture_elem : camera_setting.capture_settings) {
+        //         const auto& capture_setting = curr_capture_elem.second;
 
-                // todo why does AirSimSettings::loadCaptureSettings calls AirSimSettings::initializeCaptureSettings()
-                // which initializes default capture settings for _all_ NINE msr::airlib::ImageCaptureBase::ImageType
-                if (!(std::isnan(capture_setting.fov_degrees))) {
-                    const ImageType curr_image_type = msr::airlib::Utils::toEnum<ImageType>(capture_setting.image_type);
-                    // if scene / segmentation / surface normals / infrared, get uncompressed image with pixels_as_floats = false
-                    if (curr_image_type == ImageType::Scene ||
-                        curr_image_type == ImageType::Segmentation ||
-                        curr_image_type == ImageType::SurfaceNormals ||
-                        curr_image_type == ImageType::Infrared) {
-                        // current_image_request_vec.push_back(ImageRequest(curr_camera_name, curr_image_type, false, false));
-                    }
-                    // if {DepthPlanar, DepthPerspective,DepthVis, DisparityNormalized}, get float image
-                    else {
-                        // current_image_request_vec.push_back(ImageRequest(curr_camera_name, curr_image_type, true));
-                    }
+        //         // todo why does AirSimSettings::loadCaptureSettings calls AirSimSettings::initializeCaptureSettings()
+        //         // which initializes default capture settings for _all_ NINE msr::airlib::ImageCaptureBase::ImageType
+        //         if (!(std::isnan(capture_setting.fov_degrees))) {
+        //             const ImageType curr_image_type = msr::airlib::Utils::toEnum<ImageType>(capture_setting.image_type);
+        //             // if scene / segmentation / surface normals / infrared, get uncompressed image with pixels_as_floats = false
+        //             if (curr_image_type == ImageType::Scene ||
+        //                 curr_image_type == ImageType::Segmentation ||
+        //                 curr_image_type == ImageType::SurfaceNormals ||
+        //                 curr_image_type == ImageType::Infrared) {
+        //                 current_image_request_vec.push_back(ImageRequest(curr_camera_name, curr_image_type, false, false));
+        //             }
+        //             // if {DepthPlanar, DepthPerspective,DepthVis, DisparityNormalized}, get float image
+        //             else {
+        //                 current_image_request_vec.push_back(ImageRequest(curr_camera_name, curr_image_type, true));
+        //             }
 
-                    const std::string cam_image_topic = curr_vehicle_name + "/" + curr_camera_name + "/" +
-                                                        image_type_int_to_string_map_.at(capture_setting.image_type);
+        //             const std::string cam_image_topic = curr_vehicle_name + "/" + curr_camera_name + "/" +
+        //                                                 image_type_int_to_string_map_.at(capture_setting.image_type);
 
-                    // image_pub_vec_.push_back(image_transporter.advertise(cam_image_topic, 1));
-                    // cam_info_pub_vec_.push_back(nh_private_.advertise<sensor_msgs::CameraInfo>(cam_image_topic + "/camera_info", 10));
-                    // camera_info_msg_vec_.push_back(generate_cam_info(curr_camera_name, camera_setting, capture_setting));
-                }
-            }
-            // push back pair (vector of image captures, current vehicle name)
-            // airsim_img_request_vehicle_name_pair_vec_.push_back({ current_image_request_vec, curr_vehicle_name });
-        }
+        //             image_pub_vec_.push_back(image_transporter.advertise(cam_image_topic, 1));
+        //             cam_info_pub_vec_.push_back(nh_private_.advertise<sensor_msgs::CameraInfo>(cam_image_topic + "/camera_info", 10));
+        //             camera_info_msg_vec_.push_back(generate_cam_info(curr_camera_name, camera_setting, capture_setting));
+        //         }
+        //     }
+        //     // push back pair (vector of image captures, current vehicle name)
+        //     // airsim_img_request_vehicle_name_pair_vec_.push_back({ current_image_request_vec, curr_vehicle_name });
+        // }
 
         // iterate over sensors
         std::vector<SensorPublisher> sensors;
@@ -320,17 +320,17 @@ void AirsimROSWrapper::create_ros_pubs_from_settings_json()
     }
 
     // if >0 cameras, add one more thread for img_request_timer_cb
-    if (!airsim_img_request_vehicle_name_pair_vec_.empty()) {
-        double update_airsim_img_response_every_n_sec;
-        nh_private_.getParam("update_airsim_img_response_every_n_sec", update_airsim_img_response_every_n_sec);
+    // if (!airsim_img_request_vehicle_name_pair_vec_.empty()) {
+    //     double update_airsim_img_response_every_n_sec;
+    //     nh_private_.getParam("update_airsim_img_response_every_n_sec", update_airsim_img_response_every_n_sec);
 
-        ros::TimerOptions timer_options(ros::Duration(update_airsim_img_response_every_n_sec),
-                                        boost::bind(&AirsimROSWrapper::img_response_timer_cb, this, _1),
-                                        &img_timer_cb_queue_);
+    //     ros::TimerOptions timer_options(ros::Duration(update_airsim_img_response_every_n_sec),
+    //                                     boost::bind(&AirsimROSWrapper::img_response_timer_cb, this, _1),
+    //                                     &img_timer_cb_queue_);
 
-        airsim_img_response_timer_ = nh_private_.createTimer(timer_options);
-        is_used_img_timer_cb_queue_ = true;
-    }
+    //     airsim_img_response_timer_ = nh_private_.createTimer(timer_options);
+    //     is_used_img_timer_cb_queue_ = true;
+    // }
 
     // lidars update on their own callback/thread at a given rate
     if (lidar_cnt > 0) {
@@ -1072,7 +1072,7 @@ void AirsimROSWrapper::publish_vehicle_state()
 
         // odom and transforms
         vehicle_ros->odom_local_pub.publish(vehicle_ros->curr_odom);
-        publish_odom_tf(vehicle_ros->curr_odom);
+        // publish_odom_tf(vehicle_ros->curr_odom);
 
         // ground truth GPS position from sim/HITL
         vehicle_ros->global_gps_pub.publish(vehicle_ros->gps_sensor_msg);
@@ -1302,14 +1302,15 @@ void AirsimROSWrapper::img_response_timer_cb(const ros::TimerEvent& event)
 {
     try {
         int image_response_idx = 0;
-        // for (const auto& airsim_img_request_vehicle_name_pair : airsim_img_request_vehicle_name_pair_vec_) {
-        //     const std::vector<ImageResponse>& img_response = airsim_client_images_.simGetImages(airsim_img_request_vehicle_name_pair.first, airsim_img_request_vehicle_name_pair.second);
+        // for (const auto& airsim_img_request_vehicle_name_pair : airsim_img_request_vehicle_name_pair_vec_) 
+        {
+            // const std::vector<ImageResponse>& img_response = airsim_client_images_.simGetImages(airsim_img_request_vehicle_name_pair.first, airsim_img_request_vehicle_name_pair.second);
 
-        //     if (img_response.size() == airsim_img_request_vehicle_name_pair.first.size()) {
-        //         process_and_publish_img_response(img_response, image_response_idx, airsim_img_request_vehicle_name_pair.second);
-        //         image_response_idx += img_response.size();
-        //     }
-        // }
+            // if (img_response.size() == airsim_img_request_vehicle_name_pair.first.size()) {
+                // process_and_publish_img_response(img_response, image_response_idx, airsim_img_request_vehicle_name_pair.second);
+                // image_response_idx += img_response.size();
+            // }
+        }
     }
 
     catch (rpc::rpc_error& e) {
@@ -1407,15 +1408,15 @@ void AirsimROSWrapper::process_and_publish_img_response(const std::vector<ImageR
     for (const auto& curr_img_response : img_response_vec) {
         // todo publishing a tf for each capture type seems stupid. but it foolproofs us against render thread's async stuff, I hope.
         // Ideally, we should loop over cameras and then captures, and publish only one tf.
-        publish_camera_tf(curr_img_response, curr_ros_time, vehicle_name, curr_img_response.camera_name);
+        // publish_camera_tf(curr_img_response, curr_ros_time, vehicle_name, curr_img_response.camera_name);
 
         // todo simGetCameraInfo is wrong + also it's only for image type -1.
         // msr::airlib::CameraInfo camera_info = airsim_client_.simGetCameraInfo(curr_img_response.camera_name);
 
         // update timestamp of saved cam info msgs
 
-        camera_info_msg_vec_[img_response_idx_internal].header.stamp = airsim_timestamp_to_ros(curr_img_response.time_stamp);
-        cam_info_pub_vec_[img_response_idx_internal].publish(camera_info_msg_vec_[img_response_idx_internal]);
+        // camera_info_msg_vec_[img_response_idx_internal].header.stamp = airsim_timestamp_to_ros(curr_img_response.time_stamp);
+        // cam_info_pub_vec_[img_response_idx_internal].publish(camera_info_msg_vec_[img_response_idx_internal]);
 
         // DepthPlanar / DepthPerspective / DepthVis / DisparityNormalized
         if (curr_img_response.pixels_as_float) {
@@ -1425,11 +1426,11 @@ void AirsimROSWrapper::process_and_publish_img_response(const std::vector<ImageR
         }
         // Scene / Segmentation / SurfaceNormals / Infrared
         else {
-            image_pub_vec_[img_response_idx_internal].publish(get_img_msg_from_response(curr_img_response,
-                                                                                        curr_ros_time,
-                                                                                        curr_img_response.camera_name + "_optical"));
+            // image_pub_vec_[img_response_idx_internal].publish(get_img_msg_from_response(curr_img_response,
+                                                                                        // curr_ros_time,
+                                                                                        // curr_img_response.camera_name + "_optical"));
         }
-        img_response_idx_internal++;
+        // img_response_idx_internal++;
     }
 }
 
@@ -1477,8 +1478,8 @@ void AirsimROSWrapper::publish_camera_tf(const ImageResponse& img_response, cons
     quat_cam_optical.normalize();
     tf2::convert(quat_cam_optical, cam_tf_optical_msg.transform.rotation);
 
-    tf_broadcaster_.sendTransform(cam_tf_body_msg);
-    tf_broadcaster_.sendTransform(cam_tf_optical_msg);
+    // tf_broadcaster_.sendTransform(cam_tf_body_msg);
+    // tf_broadcaster_.sendTransform(cam_tf_optical_msg);
 }
 
 void AirsimROSWrapper::convert_yaml_to_simple_mat(const YAML::Node& node, SimpleMatrix& m) const
